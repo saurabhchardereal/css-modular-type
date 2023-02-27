@@ -7,21 +7,25 @@ type Config = {
    * @default 320px
    */
   minScreenWidth: number;
+
   /**
    * Maximum screen width that the font scales to.
    * @default 1536px
    */
   maxScreenWidth: number;
+
   /**
    * Minimum font size allowed. Font size won't go below this size
    * @default 16px
    */
   minFontSize: number;
+
   /**
    * Maximum font size allowed. Font size won't go above this size
    * @default 20px
    */
   maxFontSize: number;
+
   /**
    * Font scaling ratio. Could be one of the ratio given below or a custom one.
    *
@@ -37,59 +41,70 @@ type Config = {
    * @default 1.2
    */
   minRatio: number;
+
   /**
    * Font scaling ratio. See `minFontSize` for more details
    * @default 1.333
    */
   maxRatio: number;
+
   /**
    * Minimum steps of font scales to produce (excluding base font size)
    * @default 2
    */
   minStep: number;
+
   /**
    * Maximum steps of font scales to produce (excluding base font size)
    * @default 5
    */
   maxStep: number;
+
   /**
    * Root font size
    * @default 16px
    */
   rootFontSize: number;
+
   /**
    * Font values precision
    * @default 2
    */
   precision: number;
+
   /**
    * Prefix for font variables
    * @default 'font-size-'
    */
   prefix: string;
+
   /**
    * Suffix to use for generated font scales.
    *
-   * `numbered` = use numbered suffix (eg. `--step-1`, `--step-2`)
-   * `values` = use suffixes from values array (eg. `--step-sm`, `--step-xl`)
+   * `numbered` = use numbered suffix (eg. `--font-size-1`, `--font-size-2`)
+   * `values` = use suffixes from values array (eg. `--font-size-sm`, `--font-size-xl`)
    *
    * @default numbered
    */
   suffix: "numbered" | "values";
+
   /**
    * Array of suffix for each step in your type scale, in ascending order of
    * font size.
    * @default ["xs", "sm", "base", "md", "lg", "xl", "xxl", "xxxl"]
    */
   values: string[];
+
   /**
    * Output unit
    */
   unit: "px" | "rem";
+
   /**
    * Whether to replace font variables inline or not.
    */
   replaceInline: boolean;
+
   /**
    * Generator directive string. Adding this string (as comment) in any CSS
    * selector will replace it with generated font variables. Requires
@@ -186,14 +201,18 @@ const plugin: PluginCreator<Config> = (opts: Partial<Config> = {}) => {
 
   return {
     postcssPlugin: "postcss-modular-type",
-    Comment(cmt, { Declaration }) {
-      if (cmt.text === generatorDirective && !replaceInline) {
-        const fontVars = [];
-        for (const [key, value] of stepsMap) {
-          fontVars.push(new Declaration({ prop: key, value: value }));
+    Rule(rule, { Declaration }) {
+      if (replaceInline) return;
+
+      rule.walkComments((cmt) => {
+        if (cmt.text === generatorDirective) {
+          const fontVars = [];
+          for (const [key, value] of stepsMap) {
+            fontVars.push(new Declaration({ prop: key, value: value }));
+          }
+          cmt.replaceWith(fontVars);
         }
-        cmt.replaceWith(fontVars);
-      }
+      });
     },
     Declaration(decl) {
       if (replaceInline && decl.value.includes(prefix)) {
