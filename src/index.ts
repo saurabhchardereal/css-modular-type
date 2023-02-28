@@ -86,22 +86,24 @@ type Config = {
    *
    * @default numbered
    */
-  suffix: "numbered" | "values";
+  suffixType: "numbered" | "values";
 
   /**
    * Array of suffix for each step in your type scale, in ascending order of
    * font size.
    * @default ["xs", "sm", "base", "md", "lg", "xl", "xxl", "xxxl"]
    */
-  values: string[];
+  suffixValues: string[];
 
   /**
    * Output unit
+   * @default 'rem'
    */
   unit: "px" | "rem";
 
   /**
    * Whether to replace font variables inline or not.
+   * @default false
    */
   replaceInline: boolean;
 
@@ -109,6 +111,7 @@ type Config = {
    * Generator directive string. Adding this string (as comment) in any CSS
    * selector will replace it with generated font variables. Requires
    * `replaceInline` to be disabled.
+   * @default 'postcss-modular-type-generate'
    */
   generatorDirective: string;
 };
@@ -125,8 +128,8 @@ const defaultConfig: Config = {
   precision: 2,
   prefix: "font-size-",
   rootFontSize: 16,
-  suffix: "numbered",
-  values: ["xs", "sm", "base", "md", "lg", "xl", "xxl", "xxxl"],
+  suffixType: "numbered",
+  suffixValues: ["xs", "sm", "base", "md", "lg", "xl", "xxl", "xxxl"],
   unit: "rem",
   replaceInline: false,
   generatorDirective: "postcss-modular-type-generate",
@@ -146,8 +149,8 @@ const plugin: PluginCreator<Config> = (opts: Partial<Config> = {}) => {
     precision,
     prefix,
     rootFontSize,
-    suffix,
-    values,
+    suffixType,
+    suffixValues,
     unit,
     replaceInline,
     generatorDirective,
@@ -158,14 +161,14 @@ const plugin: PluginCreator<Config> = (opts: Partial<Config> = {}) => {
 
   // If the user hasn't provided sufficient suffixes to map to total steps
   // throw an error
-  if (suffix === "values" && values.length <= maxStep + minStep) {
+  if (suffixType === "values" && suffixValues.length <= maxStep + minStep) {
     throw new Error(
       "Insufficient suffixes passed.\n" +
         `Number of steps: ${minStep}(minstep) + ${maxStep}(maxStep) + 1(baseStep) = ${
           minStep + maxStep + 1
         }\n` +
-        `Number of suffixes: ${values.length}\n` +
-        `Current suffix list: ${values}\n`
+        `Number of suffixes: ${suffixValues.length}\n` +
+        `Current suffix list: ${suffixValues}\n`
     );
   }
 
@@ -190,9 +193,9 @@ const plugin: PluginCreator<Config> = (opts: Partial<Config> = {}) => {
     const fsMinFinal = `${fsMinSize.toFixed(precision)}${unit}`;
     const fsMaxFinal = `${fsMaxSize.toFixed(precision)}${unit}`;
 
-    let key =
-      suffix === "values"
-        ? `--${prefix}${values[step]}`
+    const key =
+      suffixType === "values"
+        ? `--${prefix}${suffixValues[step]}`
         : `--${prefix}${power}`;
     const value = `clamp(${fsMinFinal},  ${slopeVw}vw + ${yIntersect}${unit} , ${fsMaxFinal})`;
 
