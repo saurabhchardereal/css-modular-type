@@ -1,9 +1,12 @@
 <div align="center">
-<img width="135" height="95" title="Philosopher’s stone, logo of PostCSS" src="https://raw.githubusercontent.com/postcss/brand/master/dist/postcss-logo-symbol.svg">
-<h1>PostCSS Modular Type</h1>
+  <img width="135" height="95" title="Philosopher’s stone, logo of PostCSS" src="https://raw.githubusercontent.com/postcss/brand/master/dist/postcss-logo-symbol.svg">
+  <h1>PostCSS Modular Type</h1>
+  <a href="https://github.com/saurabhchardereal/postcss-modular-type/actions/workflows/ci.yml">
+    <img src="https://github.com/saurabhchardereal/postcss-modular-type/actions/workflows/ci.yml/badge.svg">
+  </a>
 </div>
-
-A [PostCSS](https://github.com/postcss) plugin to generate modular type scales, inspired by [Fluid Type Scale Calculator](https://www.fluid-type-scale.com/).
+<p align="center">A <a href="https://github.com/postcss">PostCSS</a> plugin to generate modular type scales, inspired by <a href="https://www.fluid-type-scale.com/">Fluid Type Scale Calculator</a>.</p>
+<br/>
 
 ## Getting Started
 
