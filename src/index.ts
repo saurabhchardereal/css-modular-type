@@ -180,7 +180,7 @@ const plugin: PluginCreator<Config> = (opts: Partial<Config> = {}) => {
     replaceInline,
     generatorDirective,
   } = resolvedOptions;
-  const stepsMap = new Map();
+  const stepsMap = new Map<string, string>();
   const baseIndex = maxStep - minStep - 1;
   const toRem = (pxValue: number) => pxValue / rootFontSize;
 
@@ -193,7 +193,7 @@ const plugin: PluginCreator<Config> = (opts: Partial<Config> = {}) => {
           minStep + maxStep + 1
         }\n` +
         `Number of suffixes: ${suffixValues.length}\n` +
-        `Current suffix list: ${suffixValues}\n`
+        `Current suffix list: ${suffixValues.toString()}\n`
     );
   }
 
@@ -249,10 +249,8 @@ const plugin: PluginCreator<Config> = (opts: Partial<Config> = {}) => {
         parsed.walk((valueNode) => {
           // CSS variables is declared as a `word` node in `postcss-value-parser`
           if (valueNode.type !== "word") return;
-
-          if (stepsMap.has(valueNode.value)) {
-            decl.value = stepsMap.get(valueNode.value);
-          }
+          const value = stepsMap.get(valueNode.value);
+          if (value) decl.value = value;
         });
       }
     },
