@@ -197,7 +197,7 @@ const plugin: PluginCreator<Config> = (opts: Partial<Config> = {}) => {
     );
   }
 
-  if (unit === "rem") {
+  if (unit !== "px") {
     minScreenWidth = toRem(minScreenWidth);
     maxScreenWidth = toRem(maxScreenWidth);
     minFontSize = toRem(minFontSize);
