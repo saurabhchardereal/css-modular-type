@@ -3,6 +3,7 @@
   <h1>PostCSS Modular Type</h1>
   <a href="https://github.com/saurabhchardereal/postcss-modular-type/actions/workflows/ci.yml">
     <img src="https://github.com/saurabhchardereal/postcss-modular-type/actions/workflows/ci.yml/badge.svg">
+    <img src="https://img.shields.io/npm/v/postcss-modular-type?color=%2330C452&logo=npm&labelColor=%23394048">
   </a>
 </div>
 <p align="center">A <a href="https://github.com/postcss">PostCSS</a> plugin to generate modular type scales, inspired by <a href="https://www.fluid-type-scale.com/">Fluid Type Scale Calculator</a>.</p>
@@ -78,7 +79,7 @@ module.exports = {
       precision: 2,
       prefix: "font-size-",
       rootFontSize: 16,
-      suffixtype: "numbered",
+      suffixType: "numbered",
       suffixValues: ["xs", "sm", "base", "md", "lg", "xl", "xxl", "xxxl"],
       unit: "rem",
       replaceInline: false,
