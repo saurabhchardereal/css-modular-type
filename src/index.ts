@@ -139,6 +139,14 @@ type Config = {
    * @default "postcss-modular-type-generate"
    */
   generatorDirective: string;
+
+  /**
+   * Whether to insert min and max font size as variables instead of inserting
+   * them directly.
+   *
+   * @default false
+   */
+  insertMinMaxFontAsVariables: boolean;
 };
 
 const defaultConfig: Config = {
@@ -158,6 +166,7 @@ const defaultConfig: Config = {
   unit: "rem",
   replaceInline: false,
   generatorDirective: "postcss-modular-type-generate",
+  insertMinMaxFontAsVariables: false,
 };
 
 const plugin: PluginCreator<Config> = (opts: Partial<Config> = {}) => {
@@ -179,6 +188,7 @@ const plugin: PluginCreator<Config> = (opts: Partial<Config> = {}) => {
     unit,
     replaceInline,
     generatorDirective,
+    insertMinMaxFontAsVariables,
   } = resolvedOptions;
   const stepsMap = new Map<string, string>();
   const baseIndex = maxStep - minStep - 1;
@@ -222,13 +232,51 @@ const plugin: PluginCreator<Config> = (opts: Partial<Config> = {}) => {
       suffixType === "values"
         ? `--${prefix}${suffixValues[step]}`
         : `--${prefix}${power}`;
-    const value = `clamp(${fsMinFinal},  ${slopeVw}vw + ${yIntersect}${unit} , ${fsMaxFinal})`;
+    let value = `clamp(${fsMinFinal},  ${slopeVw}vw + ${yIntersect}${unit} , ${fsMaxFinal})`;
+
+    if (insertMinMaxFontAsVariables) {
+      const minkey =
+        suffixType === "values"
+          ? `--${prefix}min-${suffixValues[step]}`
+          : `--${prefix}min-${power}`;
+      const maxKey =
+        suffixType === "values"
+          ? `--${prefix}max-${suffixValues[step]}`
+          : `--${prefix}max-${power}`;
+
+      value = `clamp(var(${minkey}),  ${slopeVw}vw + ${yIntersect}${unit} , var(${maxKey}))`;
+      stepsMap.set(minkey, fsMinFinal);
+      stepsMap.set(maxKey, fsMaxFinal);
+    }
 
     stepsMap.set(key, value);
   }
 
   return {
     postcssPlugin: "postcss-modular-type",
+    Once(root, { result }) {
+      root.walkDecls((decl) => {
+        if (replaceInline && decl.value.includes(prefix)) {
+          const parsed = valueParser(decl.value);
+
+          parsed.walk((valueNode) => {
+            // CSS variables is declared as a `word` node in `postcss-value-parser`
+            if (valueNode.type !== "word") return;
+            const value = stepsMap.get(valueNode.value);
+            if (value) {
+              decl.value = value;
+            } else {
+              decl.warn(
+                result,
+                "Not replacing the following declaration. Step maybe out-of-bound.\n" +
+                  `${decl.prop}: ${decl.value}`
+              );
+            }
+          });
+        }
+      });
+    },
+
     Rule(rule, { Declaration }) {
       if (replaceInline) return;
 
@@ -241,18 +289,6 @@ const plugin: PluginCreator<Config> = (opts: Partial<Config> = {}) => {
           cmt.replaceWith(fontVars);
         }
       });
-    },
-    Declaration(decl) {
-      if (replaceInline && decl.value.includes(prefix)) {
-        const parsed = valueParser(decl.value);
-
-        parsed.walk((valueNode) => {
-          // CSS variables is declared as a `word` node in `postcss-value-parser`
-          if (valueNode.type !== "word") return;
-          const value = stepsMap.get(valueNode.value);
-          if (value) decl.value = value;
-        });
-      }
     },
   };
 };

@@ -226,6 +226,94 @@ Generator directive string. Adding this string (as a comment) in any CSS selecto
 
 It is recommended you put this into your `:root {}` CSS selector so you can access font variables globally.
 
+#### `insertMinMaxFontAsVariables`
+
+**Type:** `boolean`
+
+Whether to insert min and max font size as variables instead of inserting them directly.
+
+```javascript
+// postcss.config.js
+module.exports = {
+  plugins: [
+    require("postcss-modular-type")({
+      insertMinMaxFontAsVariables: true,
+    }),
+  ],
+};
+```
+
+##### Input
+
+```css
+button {
+  /* postcss-modular-type-generate */
+}
+```
+
+##### Output
+
+```css
+:root {
+  --font-size-min--2: 0.69rem;
+  --font-size-max--2: 0.7rem;
+  --font-size--2: clamp(
+    var(--font-size-min--2),
+    0.01vw + 0.69rem,
+    var(--font-size-max--2)
+  );
+  --font-size-min--1: 0.83rem;
+  --font-size-max--1: 0.94rem;
+  --font-size--1: clamp(
+    var(--font-size-min--1),
+    0.14vw + 0.81rem,
+    var(--font-size-max--1)
+  );
+  --font-size-min-0: 1rem;
+  --font-size-max-0: 1.25rem;
+  --font-size-0: clamp(
+    var(--font-size-min-0),
+    0.33vw + 0.93rem,
+    var(--font-size-max-0)
+  );
+  --font-size-min-1: 1.2rem;
+  --font-size-max-1: 1.67rem;
+  --font-size-1: clamp(
+    var(--font-size-min-1),
+    0.61vw + 1.08rem,
+    var(--font-size-max-1)
+  );
+  --font-size-min-2: 1.44rem;
+  --font-size-max-2: 2.22rem;
+  --font-size-2: clamp(
+    var(--font-size-min-2),
+    1.03vw + 1.23rem,
+    var(--font-size-max-2)
+  );
+  --font-size-min-3: 1.73rem;
+  --font-size-max-3: 2.96rem;
+  --font-size-3: clamp(
+    var(--font-size-min-3),
+    1.62vw + 1.4rem,
+    var(--font-size-max-3)
+  );
+  --font-size-min-4: 2.07rem;
+  --font-size-max-4: 3.95rem;
+  --font-size-4: clamp(
+    var(--font-size-min-4),
+    2.46vw + 1.58rem,
+    var(--font-size-max-4)
+  );
+  --font-size-min-5: 2.49rem;
+  --font-size-max-5: 5.26rem;
+  --font-size-5: clamp(
+    var(--font-size-min-5),
+    3.65vw + 1.76rem,
+    var(--font-size-max-5)
+  );
+}
+```
+
 ## Acknowledgments
 
 This plugin is mostly inspired by [this blog post](https://www.aleksandrhovhannisyan.com/blog/fluid-type-scale-with-css-clamp/) by [Aleksandr Hovhannisyan](https://github.com/AleksandrHovhannisyan).
