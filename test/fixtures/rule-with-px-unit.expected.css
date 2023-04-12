@@ -1,0 +1,10 @@
+:root {
+  font-size: clamp(11.11px, 0.01vw + 11.07px, 11.26px);
+  font-size: clamp(13.33px, 0.14vw + 12.89px, 15.00px);
+  font-size: clamp(16.00px, 0.33vw + 14.95px, 20.00px);
+  font-size: clamp(19.20px, 0.61vw + 17.24px, 26.66px);
+  font-size: clamp(23.04px, 1.03vw + 19.75px, 35.54px);
+  font-size: clamp(27.65px, 1.62vw + 22.46px, 47.37px);
+  font-size: clamp(33.18px, 2.46vw + 25.29px, 63.15px);
+  font-size: clamp(39.81px, 3.65vw + 28.14px, 84.17px);
+}
