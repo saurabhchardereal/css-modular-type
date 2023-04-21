@@ -1,18 +1,10 @@
 import assert from "node:assert/strict";
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync /*, writeFileSync */ } from "node:fs";
 import postcss from "postcss";
-import { Options } from "../src";
+import { PostcssOpts } from "../src/types";
 
-// I don't know why but `require`-ing the plugin and invoking it in subsequent
-// tests somehow persist the previously set plugin option instead of doing a fresh
-// transform. Avoiding node's module cache fixed it.
-function requireUncached(module: string) {
-  delete require.cache[require.resolve(module)];
-  return require(module);
-}
-
-function process(from: string, pluginOpts?: Partial<Options>) {
-  return postcss([requireUncached("../src")(pluginOpts)]).process(
+function process(from: string, pluginOpts?: Partial<PostcssOpts>) {
+  return postcss([require("../src/postcss")(pluginOpts)]).process(
     readFileSync(from, "utf8"),
     { from }
   );
@@ -25,7 +17,7 @@ function filename(name: string) {
 function assertPostcss(
   inputFilename: string,
   outputFile: string | undefined,
-  pluginOpts?: Partial<Options>,
+  pluginOpts?: Partial<PostcssOpts>,
   message?: string
 ) {
   const from = filename(inputFilename) + ".css";
@@ -44,7 +36,7 @@ function assertPostcss(
 
 function assertPostcssThrows(
   inputFilename: string,
-  pluginOpts?: Partial<Options>,
+  pluginOpts?: Partial<PostcssOpts>,
   message?: string
 ) {
   const from = filename(inputFilename) + ".css";
