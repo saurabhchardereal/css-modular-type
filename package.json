@@ -1,7 +1,7 @@
 {
-  "name": "postcss-modular-type",
-  "version": "0.1.0",
-  "description": "A PostCSS plugin for generating modular type scales.",
+  "name": "css-modular-type",
+  "version": "0.2.0",
+  "description": "A PostCSS and TailwindCSS plugin for generating modular type scales.",
   "type": "commonjs",
   "scripts": {
     "build": "rm -rf ./dist && tsc",
@@ -19,6 +19,9 @@
     "css",
     "postcss",
     "postcss-plugin",
+    "tailwind",
+    "tailwindcss-plugin",
+    "tailwindcss",
     "type",
     "typography",
     "fluid"
