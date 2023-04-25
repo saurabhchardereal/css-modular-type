@@ -9,10 +9,12 @@
     "lint": "eslint . && prettier --check .",
     "test": "rm -rf ./dist/test && tsc && node ./dist/test/index.test.js"
   },
-  "main": "dist/src/index.js",
+  "main": "postcss.js",
   "types": "dist/src/index.d.ts",
   "files": [
     "dist/src/*",
+    "postcss.js",
+    "tailwind.js",
     "LICENSE"
   ],
   "keywords": [
