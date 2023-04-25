@@ -19,9 +19,9 @@ const generateFontScales = (opts: GeneratorOptions) => {
     insertMinMaxFontAsVariables,
   } = opts;
 
-  const stepsMap = new Map<string, string>();
-  const baseIndex = minStep === 0 ? 0 : minStep;
-  const toRem = (pxValue: number) => pxValue / rootFontSize;
+  if (minStep < 0 || maxStep < 0) {
+    throw new Error("minStep or maxStep cannot be negative values!");
+  }
 
   // If the user hasn't provided sufficient suffixes to map to total steps
   // throw an error
@@ -35,6 +35,10 @@ const generateFontScales = (opts: GeneratorOptions) => {
         `Current suffix list: ${suffixValues.toString()}\n`
     );
   }
+
+  const stepsMap = new Map<string, string>();
+  const baseIndex = minStep === 0 ? 0 : minStep;
+  const toRem = (pxValue: number) => pxValue / rootFontSize;
 
   if (unit !== "px") {
     minScreenWidth = toRem(minScreenWidth);

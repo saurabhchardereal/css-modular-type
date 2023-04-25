@@ -131,3 +131,11 @@ assertPostcssThrows(
   },
   "Throws due to insufficient suffixValues"
 );
+
+assertPostcssThrows(
+  "rule-generator-directive",
+  {
+    minStep: -1,
+  },
+  "Throws due to negative minStep"
+);
