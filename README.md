@@ -1,9 +1,9 @@
 <div align="center">
   <img width="135" height="95" title="Philosopher’s stone, logo of PostCSS" src="./assets/postcss-logo.svg">
-  <img width="135" height="95" title="Philosopher’s stone, logo of PostCSS" src="./assets/tailwind-logo.svg">
+  <img width="135" height="95" title="Tailwind Logo" src="./assets/tailwind-logo.svg">
   <h1>CSS Modular Type</h1>
   <a href="https://github.com/saurabhchardereal/postcss-modular-type/actions/workflows/ci.yml">
-    <img src="https://github.com/saurabhchardereal/postcss-modular-type/actions/workflows/ci.yml/badge.svg">
+    <img src="https://github.com/saurabhchardereal/css-modular-type/actions/workflows/ci.yml/badge.svg">
     <img src="https://img.shields.io/npm/v/css-modular-type?color=%2330C452&logo=npm&labelColor=%23394048">
   </a>
 </div>
@@ -35,7 +35,7 @@ Add this plugin to your `postcss.config.js`:
 
 ```javascript
 // postcss.config.js
-const { postcss } = require("css-modular-type");
+const postcss = require("css-modular-type/postcss");
 module.exports = {
   plugins: [postcss()],
 };
@@ -44,11 +44,10 @@ module.exports = {
 Or to your `tailwind.config.js` file:
 
 ```js
-const { tailwind } = require("css-modular-type");
 module.exports = {
   /* other tailwind styles ... */
   theme: {},
-  plugins: [tailwind()],
+  plugins: [require("css-modular-type/tailwind")],
 };
 ```
 
@@ -215,7 +214,8 @@ Although, it is recommended to include all font variables using [`generatorDirec
 // postcss.config.js
 module.exports = {
   plugins: [
-    require("postcss-modular-type")({
+    /* Note the lack of 'postcss' specifier in require. 'postcss' is the default export. */
+    require("css-modular-type")({
       replaceInline: true,
     }),
   ],
@@ -258,7 +258,7 @@ Whether to insert min and max font size as variables instead of inserting them d
 // postcss.config.js
 module.exports = {
   plugins: [
-    require("postcss-modular-type")({
+    require("css-modular-type")({
       insertMinMaxFontAsVariables: true,
     }),
   ],
@@ -345,7 +345,7 @@ Changing the property to which this plugin adds generated font scales to is curr
 Example usage:
 
 ```js
-import { tailwind } from "css-modular-type";
+import tailwind from "css-modular-type/tailwind";
 
 export default = {
   theme: {},
