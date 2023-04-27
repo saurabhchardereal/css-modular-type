@@ -147,5 +147,3 @@ export type PostcssOpts = GeneratorOptions & {
    */
   generatorDirective: string;
 };
-
-export type _defaultConfigOptions = GeneratorOptions & PostcssOpts;
