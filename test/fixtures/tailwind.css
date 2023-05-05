@@ -1,0 +1,7 @@
+body {
+  @apply text-fluid-base;
+}
+
+button {
+  @apply text-fluid-3xl;
+}

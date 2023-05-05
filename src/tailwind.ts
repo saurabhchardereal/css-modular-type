@@ -1,19 +1,28 @@
-import * as twPlugin from "tailwindcss/plugin";
-import { defaultGeneratorConfig } from "./config";
+import twPlugin from "tailwindcss/plugin";
+import { defaultTailwindConfig } from "./config";
 import generateFontScales from "./generateFontScales";
-import { GeneratorOptions } from "./types";
+import { TailwindOpts } from "./types";
 
-export = twPlugin.withOptions((opts: Partial<GeneratorOptions>) => {
-  return ({ addUtilities }) => {
-    const resolvedOptions = { ...defaultGeneratorConfig, ...opts };
+export = twPlugin.withOptions(
+  () => {
+    return ({ matchUtilities, theme }) => {
+      matchUtilities(
+        { text: (value: string) => ({ fontSize: value }) },
+        { values: theme("fluidFontSize") }
+      );
+    };
+  },
+  (opts: Partial<TailwindOpts>) => {
+    const overrides = { insertMinMaxFontAsVariables: false };
+
+    const resolvedOptions = {
+      ...defaultTailwindConfig,
+      ...opts,
+      ...overrides,
+    };
     const fontSteps = generateFontScales(resolvedOptions);
-
-    const twUtilities: Record<string, { fontSize: string }> = {};
-    for (const [_key, value] of fontSteps) {
-      const key = _key.replace(/^--/, ".");
-      twUtilities[key] = { fontSize: value };
-    }
-
-    addUtilities(twUtilities);
-  };
-});
+    return {
+      theme: { fluidFontSize: Object.fromEntries(fontSteps.entries()) },
+    };
+  }
+);

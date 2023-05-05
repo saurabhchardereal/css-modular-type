@@ -1,0 +1,9 @@
+body {
+
+    font-size: clamp(1.00rem, 0.33vw + 0.93rem, 1.25rem)
+}
+
+button {
+
+    font-size: clamp(2.49rem, 3.65vw + 1.76rem, 5.26rem)
+}

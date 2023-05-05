@@ -9,7 +9,9 @@ const plugin: PluginCreator<Partial<PostcssOpts>> = (opts = {}) => {
   const { prefix, replaceInline, generatorDirective } = resolvedOptions;
   const stepsMap = generateFontScales(resolvedOptions);
   return {
-    postcssPlugin: "postcss-modular-type",
+    postcssPlugin: "css-modular-type",
+
+    // Replace each rule that has a variable matching the prefix
     Once(root, { result }) {
       root.walkDecls((decl) => {
         if (replaceInline && decl.value.includes(prefix)) {
@@ -18,7 +20,7 @@ const plugin: PluginCreator<Partial<PostcssOpts>> = (opts = {}) => {
           parsed.walk((valueNode) => {
             // CSS variables is declared as a `word` node in `postcss-value-parser`
             if (valueNode.type !== "word") return;
-            const value = stepsMap.get(valueNode.value);
+            const value = stepsMap.get(valueNode.value.replace(/^--/, ""));
             if (value) {
               decl.value = value;
             } else {
@@ -33,6 +35,7 @@ const plugin: PluginCreator<Partial<PostcssOpts>> = (opts = {}) => {
       });
     },
 
+    // Replace generatorDirective with variables
     Rule(rule, { Declaration }) {
       if (replaceInline) return;
 
@@ -40,7 +43,7 @@ const plugin: PluginCreator<Partial<PostcssOpts>> = (opts = {}) => {
         if (cmt.text === generatorDirective) {
           const fontVars = [];
           for (const [key, value] of stepsMap) {
-            fontVars.push(new Declaration({ prop: key, value: value }));
+            fontVars.push(new Declaration({ prop: `--${key}`, value }));
           }
           cmt.replaceWith(fontVars);
         }

@@ -1,4 +1,4 @@
-export interface GeneratorOptions {
+export type GeneratorOpts = {
   /**
    * Viewport width of your font's baseline step on minimum (mobile) screens
    * widths.
@@ -110,9 +110,12 @@ export interface GeneratorOptions {
    * Array of suffix for each step in your type scale, in ascending order of
    * font size.
    *
-   * @default ["xs", "sm", "base", "md", "lg", "xl", "xxl", "xxxl"]
+   * Also takes a function which is called with the default values in case
+   * you want to extend the default values array,
+   *
+   * @default ["xs", "sm", "base", "md", "lg", "xl", "2xl", "3xl"]
    */
-  suffixValues: string[];
+  suffixValues: string[] | ((defaultValues: string[]) => string[]);
 
   /**
    * Unit of output CSS.
@@ -128,9 +131,9 @@ export interface GeneratorOptions {
    * @default false
    */
   insertMinMaxFontAsVariables: boolean;
-}
+};
 
-export type PostcssOpts = GeneratorOptions & {
+export type PostcssOpts = GeneratorOpts & {
   /**
    * Whether to replace font variables inline or not.
    *
@@ -143,7 +146,9 @@ export type PostcssOpts = GeneratorOptions & {
    * selector will replace it with generated font variables. Requires
    * `replaceInline` to be disabled.
    *
-   * @default "postcss-modular-type-generate"
+   * @default "css-modular-type-generate"
    */
   generatorDirective: string;
 };
+
+export type TailwindOpts = Omit<GeneratorOpts, "insertMinMaxFontAsVariables">;

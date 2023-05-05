@@ -1,6 +1,7 @@
-import { GeneratorOptions } from "./types";
+import { defaultGeneratorConfig } from "./config";
+import { GeneratorOpts } from "./types";
 
-const generateFontScales = (opts: GeneratorOptions) => {
+const generateFontScales = (opts: GeneratorOpts) => {
   let {
     minScreenWidth,
     maxScreenWidth,
@@ -21,6 +22,10 @@ const generateFontScales = (opts: GeneratorOptions) => {
 
   if (minStep < 0 || maxStep < 0) {
     throw new Error("minStep or maxStep cannot be negative values!");
+  }
+
+  if (typeof suffixValues === "function") {
+    suffixValues = suffixValues(defaultGeneratorConfig.suffixValues);
   }
 
   // If the user hasn't provided sufficient suffixes to map to total steps
@@ -63,21 +68,21 @@ const generateFontScales = (opts: GeneratorOptions) => {
 
     const key =
       suffixType === "values"
-        ? `--${prefix}${suffixValues[step]}`
-        : `--${prefix}${power}`;
+        ? `${prefix}${suffixValues[step]}`
+        : `${prefix}${power}`;
     let value = `clamp(${fsMinFinal}, ${slopeVw}vw + ${yIntersect}${unit}, ${fsMaxFinal})`;
 
     if (insertMinMaxFontAsVariables) {
       const minkey =
         suffixType === "values"
-          ? `--${prefix}min-${suffixValues[step]}`
-          : `--${prefix}min-${power}`;
+          ? `${prefix}min-${suffixValues[step]}`
+          : `${prefix}min-${power}`;
       const maxKey =
         suffixType === "values"
-          ? `--${prefix}max-${suffixValues[step]}`
-          : `--${prefix}max-${power}`;
+          ? `${prefix}max-${suffixValues[step]}`
+          : `${prefix}max-${power}`;
 
-      value = `clamp(var(${minkey}), ${slopeVw}vw + ${yIntersect}${unit}, var(${maxKey}))`;
+      value = `clamp(var(--${minkey}), ${slopeVw}vw + ${yIntersect}${unit}, var(--${maxKey}))`;
       stepsMap.set(minkey, fsMinFinal);
       stepsMap.set(maxKey, fsMaxFinal);
     }

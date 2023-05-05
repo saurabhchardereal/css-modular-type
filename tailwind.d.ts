@@ -1,9 +1,10 @@
-import { GeneratorOptions } from "./dist/src/types";
-declare const plugin: {
-  (options: Partial<GeneratorOptions>): {
-    handler: import("tailwindcss/types/config").PluginCreator;
-    config?: Partial<import("tailwindcss/types/config").Config> | undefined;
-  };
-  __isOptionsFunction: true;
+import { TailwindOpts } from "./dist/src/types";
+declare function plugin(options: Partial<TailwindOpts>): {
+  handler: () => void;
 };
+
+declare namespace plugin {
+  const __isOptionsFunction: true;
+}
+
 export = plugin;

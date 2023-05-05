@@ -1,0 +1,5 @@
+@tailwind utilities;
+
+body {
+  @apply text-scale-0;
+}

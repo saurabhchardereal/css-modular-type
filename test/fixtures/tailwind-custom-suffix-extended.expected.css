@@ -1,0 +1,6 @@
+.text-fluid-2xs {
+    font-size: clamp(0.58rem, -0.07vw + 0.59rem, 0.53rem)
+}
+.text-fluid-4xl {
+    font-size: clamp(2.99rem, 5.30vw + 1.93rem, 7.01rem)
+}

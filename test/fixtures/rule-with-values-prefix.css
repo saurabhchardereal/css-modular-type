@@ -5,6 +5,6 @@
   font-size: var(--font-size-md);
   font-size: var(--font-size-lg);
   font-size: var(--font-size-xl);
-  font-size: var(--font-size-xxl);
-  font-size: var(--font-size-xxxl);
+  font-size: var(--font-size-2xl);
+  font-size: var(--font-size-3xl);
 }

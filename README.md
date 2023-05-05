@@ -2,7 +2,7 @@
   <img width="135" height="95" title="Philosopher’s stone, logo of PostCSS" src="./assets/postcss-logo.svg">
   <img width="135" height="95" title="Tailwind Logo" src="./assets/tailwind-logo.svg">
   <h1>CSS Modular Type</h1>
-  <a href="https://github.com/saurabhchardereal/postcss-modular-type/actions/workflows/ci.yml">
+  <a href="https://github.com/saurabhchardereal/css-modular-type/actions/workflows/ci.yml">
     <img src="https://github.com/saurabhchardereal/css-modular-type/actions/workflows/ci.yml/badge.svg">
     <img src="https://img.shields.io/npm/v/css-modular-type?color=%2330C452&logo=npm&labelColor=%23394048">
   </a>
@@ -31,21 +31,24 @@ pnpm add -D css-modular-type
 
 ### Usage
 
-Add this plugin to your `postcss.config.js`:
+You can add this plugin as a PostCSS plugin inside your `postcss.config.js`:
 
 ```javascript
 // postcss.config.js
 const postcss = require("css-modular-type/postcss");
+// or just `require('css-modular-type)` as `postcss` is the default export;
+// const postcss = require("css-modular-type")
+
 module.exports = {
   plugins: [postcss()],
 };
 ```
 
-Or to your `tailwind.config.js` file:
+Or as a TailwindCSS plugin by adding in your `tailwind.config.js` file:
 
 ```js
 module.exports = {
-  /* other tailwind styles ... */
+  /* ... other tailwind styles ... */
   theme: {},
   plugins: [require("css-modular-type/tailwind")],
 };
@@ -55,7 +58,7 @@ module.exports = {
 
 ```css
 :root {
-  /* postcss-modular-type-generate */
+  /* css-modular-type-generate */
 }
 ```
 
@@ -76,7 +79,7 @@ module.exports = {
 
 ## Configuration
 
-The plugin comes with default configuration but it is possible to customise pretty much all config options to your liking.
+The plugin comes with the following default configuration, but it is possible to customise pretty much all config options to your liking.
 
 ### Default configuration
 
@@ -93,13 +96,13 @@ module.exports = {
       minStep: 2,
       maxStep: 5,
       precision: 2,
-      prefix: "font-size-",
+      prefix: "font-size-" /* set to "fluid-" in tailwind plugin */,
       rootFontSize: 16,
-      suffixType: "numbered",
-      suffixValues: ["xs", "sm", "base", "md", "lg", "xl", "xxl", "xxxl"],
+      suffixType: "numbered" /* set to "values" in tailwind plugin */,
+      suffixValues: ["xs", "sm", "base", "md", "lg", "xl", "2xl", "3xl"],
       unit: "rem",
-      replaceInline: false /* postcss only */,
-      generatorDirective: "postcss-modular-type-generate" /* postcss only */,
+      replaceInline: false /* postcss plugin only */,
+      generatorDirective: "css-modular-type-generate" /* postcss plugin only */,
     }),
   ],
 };
@@ -192,9 +195,27 @@ Suffix to use for generated font scales. Could be one of:
 
 #### `suffixValues`
 
-**Type:** `string[]`
+**Type:** `string[]` | `(defaultValues: string[]) => string[]`
 
 Array of suffix for each step in your type scale, in ascending order of font size. Will be used if `suffixType` is set to `values`.
+
+Also takes a function which is called with the default values in case you want to extend the default values array like:
+
+```js
+// postcss.config.js
+module.exports = {
+  plugins: [
+    require("css-modular-type")({
+      minStep: 3,
+      maxStep: 6,
+      suffixType: "values",
+      suffixValues: (defaultValues) => ["2xs", ...values, "4xl"],
+    }),
+  ],
+};
+
+// will generate font values as: ["2xs", "xs", "sm", "base", "md", "lg", "xl", "2xl", "3xl", "4xl"]
+```
 
 #### `unit`
 
@@ -214,7 +235,6 @@ Although, it is recommended to include all font variables using [`generatorDirec
 // postcss.config.js
 module.exports = {
   plugins: [
-    /* Note the lack of 'postcss' specifier in require. 'postcss' is the default export. */
     require("css-modular-type")({
       replaceInline: true,
     }),
@@ -246,9 +266,9 @@ button {
 
 Generator directive string. Adding this string (as a comment) in any CSS selector will replace it with generated font variables. Requires `replaceInline` to be disabled.
 
-It is recommended that you put this into your `:root {}` CSS selector so you can access font variables globally.
+It is recommended that you put this into your `:root {}` CSS selector so that you can access font variables globally.
 
-#### `insertMinMaxFontAsVariables`
+#### `insertMinMaxFontAsVariables` **`(p)`**
 
 **Type:** `boolean`
 
@@ -269,7 +289,7 @@ module.exports = {
 
 ```css
 :root {
-  /* postcss-modular-type-generate */
+  /* css-modular-type-generate */
 }
 ```
 
@@ -340,8 +360,6 @@ module.exports = {
 
 In a `tailwind` project adding this plugin will create utility classes for changing font sizes. All options are the same between `postcss` and `tailwindcss` plugin (except for the ones marked as `postcss`-only).
 
-Changing the property to which this plugin adds generated font scales to is currently not supported but I might add it sometime later.
-
 Example usage:
 
 ```js
@@ -351,7 +369,7 @@ export default = {
   theme: {},
   plugins: [
     tailwind({
-      prefix: "text-fluid-",
+      suffixType: "numbered"
     }),
   ],
 };

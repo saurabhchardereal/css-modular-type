@@ -1,0 +1,9 @@
+.text-scale-0 {
+
+    font-size: clamp(1.00rem, 0.33vw + 0.93rem, 1.25rem)
+}
+
+body {
+
+    font-size: clamp(1.00rem, 0.33vw + 0.93rem, 1.25rem)
+}
