@@ -2,8 +2,8 @@
   <img width="135" height="95" title="Philosopher’s stone, logo of PostCSS" src="./assets/postcss-logo.svg">
   <img width="135" height="95" title="Tailwind Logo" src="./assets/tailwind-logo.svg">
   <h1>CSS Modular Type</h1>
-  <a href="https://github.com/saurabhchardereal/css-modular-type/actions/workflows/ci.yml">
-    <img src="https://github.com/saurabhchardereal/css-modular-type/actions/workflows/ci.yml/badge.svg">
+  <a href="https://github.com/schardev/css-modular-type/actions/workflows/ci.yml">
+    <img src="https://github.com/schardev/css-modular-type/actions/workflows/ci.yml/badge.svg">
     <img src="https://img.shields.io/npm/v/css-modular-type?color=%2330C452&logo=npm&labelColor=%23394048">
   </a>
 </div>

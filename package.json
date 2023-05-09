@@ -51,7 +51,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/saurabhchardereal/css-modular-type"
+    "url": "https://github.com/schardev/css-modular-type"
   },
   "prettier": {
     "printWidth": 80
